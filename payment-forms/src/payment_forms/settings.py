@@ -149,6 +149,14 @@ REST_FRAMEWORK = {
 
 FRONTEND_BASE_URL = 'https://da00-178-176-176-177.eu.ngrok.io'
 
-# stipe
-STRIPE_API_PUBLISH_KEY = os.environ["STRIPE_API_PUBLISH_KEY"]
-STRIPE_API_SECRET_KEY = os.environ["STRIPE_API_SECRET_KEY"]
+# stripe
+STRIPE_API_KEY = {
+    'usd': {
+        'publish': os.environ["STRIPE_API_PUBLISH_KEY_USD"],
+        'secret': os.environ["STRIPE_API_SECRET_KEY_USD"]
+    },
+    'rub': {
+        'publish': os.environ["STRIPE_API_PUBLISH_KEY_RUB"],
+        'secret': os.environ["STRIPE_API_SECRET_KEY_RUB"]
+    }
+}

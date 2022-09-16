@@ -2,12 +2,18 @@ import stripe
 from django.conf import settings
 from urllib.parse import urljoin
 
-stripe.api_key = settings.STRIPE_API_SECRET_KEY
+from app_orders.models import Item
 
 
 class StripeAPI:
     @staticmethod
-    def create_checkout_session(line_items: list[dict]):
+    def set_stripe(currency: str):
+        stripe.api_key = settings.STRIPE_API_KEY[currency]['secret']
+
+    @staticmethod
+    def create_checkout_session(currency: Item.Currency,
+                                line_items: list[dict]):
+        StripeAPI.set_stripe(currency)
         session = stripe.checkout.Session.create(
             line_items=line_items,
             mode='payment',

@@ -24,7 +24,10 @@ class ItemCheckoutView(RetrieveAPIView):
         price_data = build_price_data(item,
                                       build_product_data(item))
         line_items = build_line_items(price_data)
-        session = StripeAPI.create_checkout_session([line_items.dict()])
+        session = StripeAPI.create_checkout_session(
+            item.currency,
+            [line_items.dict()]
+        )
 
         return Response({"session_id": session.id})
 
@@ -39,9 +42,11 @@ class ItemView(RetrieveAPIView):
         responses={200: SessionResponseSerializer},
     )
     def get(self, request, *args, **kwargs):
+        item = self.get_object()
+        stripe_publish_key = settings.STRIPE_API_KEY[item.currency]['publish']
         return render(
             request,
             'buy_item.html',
             {'item': self.get_object(),
-             'stripe_publish_key': settings.STRIPE_API_PUBLISH_KEY}
+             'stripe_publish_key': stripe_publish_key}
         )

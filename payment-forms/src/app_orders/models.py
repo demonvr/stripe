@@ -33,4 +33,7 @@ class Item(models.Model):
 
 class Order(models.Model):
     """Заказ"""
+    created_at = models.DateTimeField(
+        verbose_name='дата создания заказа'
+    )
 
