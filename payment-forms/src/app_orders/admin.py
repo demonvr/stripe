@@ -1,3 +1,18 @@
 from django.contrib import admin
 
-# Register your models here.
+from app_orders.models import Item
+
+
+class ItemAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'name',
+        'description',
+        'price',
+        'currency'
+    ]
+
+    ordering = ('name',)
+
+
+admin.site.register(Item, ItemAdmin)
