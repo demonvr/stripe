@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.conf import settings
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
@@ -38,6 +39,9 @@ class ItemView(RetrieveAPIView):
         responses={200: SessionResponseSerializer},
     )
     def get(self, request, *args, **kwargs):
-        return render(request,
-                      'buy_item.html',
-                      {'item': self.get_object()})
+        return render(
+            request,
+            'buy_item.html',
+            {'item': self.get_object(),
+             'stripe_publish_key': settings.STRIPE_API_PUBLISH_KEY}
+        )

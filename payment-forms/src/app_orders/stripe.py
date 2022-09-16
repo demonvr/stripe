@@ -2,7 +2,7 @@ import stripe
 from django.conf import settings
 from urllib.parse import urljoin
 
-stripe.api_key = settings.STRIPE_API_KEY
+stripe.api_key = settings.STRIPE_API_SECRET_KEY
 
 
 class StripeAPI:
