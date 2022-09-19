@@ -3,8 +3,7 @@ from django.conf import settings
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
-
-from app_orders.builders import build_product_data, build_price_data, build_line_items, build_checkout
+from app_orders.builders import build_checkout
 from app_orders.models import Item, Order, OrderItems
 from app_orders.serializers import SessionResponseSerializer, ItemSerializer, OrderSerializer
 from app_orders.stripe import StripeAPI
