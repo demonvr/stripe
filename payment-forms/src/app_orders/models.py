@@ -1,5 +1,6 @@
 from django.db import models
-from django.db.models import enums
+from django.db.models import enums, Sum
+from django.core.exceptions import ValidationError
 
 from sdk.models import TimeStampedModelMixin
 
@@ -35,7 +36,9 @@ class Item(models.Model):
 
 class Order(TimeStampedModelMixin):
     """Заказ"""
-    total_amount = models.DecimalField(max_digits=15,
+    total_amount = models.DecimalField(blank=True,
+                                       null=True,
+                                       max_digits=15,
                                        decimal_places=2,
                                        verbose_name='общая сумма заказа')
     order_items = models.ManyToManyField(Item,
@@ -49,12 +52,27 @@ class Order(TimeStampedModelMixin):
     def __str__(self):
         return 'Заказ №' + str(self.id)
 
+    def save(self, *args, **kwargs):
+        if self.pk:
+            order_items = OrderItems.objects.filter(
+                order_id=self.id
+            )
+            # пересчет общей суммы заказа
+            self.total_amount = order_items.aggregate(
+                total=Sum('total_amount')
+            )['total']
+
+            # проверка на одинаковые валюты
+            if len(order_items.distinct('item__currency')) > 1:
+                raise ValidationError("Currencies must be the same!")
+        super().save(*args, **kwargs)
+
 
 class OrderItems(TimeStampedModelMixin):
     """Товары в заказе"""
-    price = models.DecimalField(max_digits=15,
-                                decimal_places=2,
-                                verbose_name='стоимость товара')
+    total_amount = models.DecimalField(max_digits=15,
+                                       decimal_places=2,
+                                       verbose_name='общая стоимость товара')
     quantity = models.PositiveIntegerField(verbose_name='количество товара')
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
@@ -62,3 +80,27 @@ class OrderItems(TimeStampedModelMixin):
     class Meta:
         verbose_name = 'товар в заказе'
         verbose_name_plural = 'товары в заказе'
+
+    def __str__(self):
+        return self.item.name
+
+    def recalculate_and_save_total_count(self, order: Order):
+        order.total_amount = OrderItems.objects.filter(
+            order_id=self.order.id
+        ).aggregate(
+            total=Sum('total_amount')
+        )['total']
+        order.save()
+
+    def save(self, *args, **kwargs):
+        self.total_amount = self.item.price * self.quantity
+        super().save(*args, **kwargs)
+        self.recalculate_and_save_total_count(
+            Order.objects.get(id=self.order.id)
+        )
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        self.recalculate_and_save_total_count(
+            Order.objects.get(id=self.order.id)
+        )
