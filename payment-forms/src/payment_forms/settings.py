@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     # Project apps
     'app_orders',
+    'sdk',
 ]
 
 MIDDLEWARE = [
