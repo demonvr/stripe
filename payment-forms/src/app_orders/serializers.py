@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from app_orders.models import Item
+from app_orders.models import Item, Order
 
 
 class SessionResponseSerializer(serializers.Serializer):
@@ -10,4 +10,10 @@ class SessionResponseSerializer(serializers.Serializer):
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
+        fields = '__all__'
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
         fields = '__all__'

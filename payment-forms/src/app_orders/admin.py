@@ -26,8 +26,8 @@ class OrderItemsInline(admin.StackedInline):
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
-        'created_at',
         'id',
+        'created_at',
         'total_amount',
     ]
 

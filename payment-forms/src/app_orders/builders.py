@@ -22,3 +22,14 @@ def build_line_items(price_data: PriceData) -> LineItems:
         price_data=price_data,
         quantity=1
     )
+
+
+def build_checkout(items: list[Item]) -> list[dict]:
+    line_items = []
+    for item in items:
+        price_data = build_price_data(item,
+                                      build_product_data(item))
+        line_items.append(
+            build_line_items(price_data).dict()
+        )
+    return line_items
