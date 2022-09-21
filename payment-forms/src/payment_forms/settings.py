@@ -142,13 +142,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.IsAuthenticated'
-    # ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
-FRONTEND_BASE_URL = 'https://da00-178-176-176-177.eu.ngrok.io'
+FRONTEND_BASE_URL = os.environ["FRONTEND_BASE_URL"]
 
 # stripe
 STRIPE_API_KEY = {
@@ -161,3 +158,4 @@ STRIPE_API_KEY = {
         'secret': os.environ["STRIPE_API_SECRET_KEY_RUB"]
     }
 }
+STRIPE_ENDPOINT_SECRET = os.environ["STRIPE_ENDPOINT_SECRET"]

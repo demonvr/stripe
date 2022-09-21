@@ -29,10 +29,12 @@ class OrderAdmin(admin.ModelAdmin):
         'id',
         'created_at',
         'total_amount',
+        'status',
     ]
 
     readonly_fields = (
         'total_amount',
+        'status',
     )
     filter_horizontal = ('order_items', )
     ordering = ('-created_at', )

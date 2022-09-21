@@ -36,6 +36,13 @@ class Item(models.Model):
 
 class Order(TimeStampedModelMixin):
     """Заказ"""
+
+    class Status(enums.TextChoices):
+        """Валюта"""
+        CREATE = "create", "Заказ создан"
+        COMPLETED = "completed", "Заказ оплачен"
+        FAILED = 'failed', "Оплата отменена"
+
     total_amount = models.DecimalField(blank=True,
                                        null=True,
                                        max_digits=15,
@@ -44,6 +51,10 @@ class Order(TimeStampedModelMixin):
     order_items = models.ManyToManyField(Item,
                                          related_name='orders',
                                          through='OrderItems')
+    status = models.CharField(max_length=20,
+                              choices=Status.choices,
+                              default=Status.CREATE,
+                              verbose_name='статус заказа')
 
     class Meta:
         verbose_name = 'заказ'
@@ -85,6 +96,7 @@ class OrderItems(TimeStampedModelMixin):
         return self.item.name
 
     def recalculate_and_save_total_count(self, order: Order):
+        """Пересчет и сохранение общей суммы заказа"""
         order.total_amount = OrderItems.objects.filter(
             order_id=self.order.id
         ).aggregate(

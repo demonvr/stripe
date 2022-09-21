@@ -1,12 +1,23 @@
 from django.shortcuts import render
 from django.conf import settings
+from django.views.generic import TemplateView
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
 from app_orders.builders import build_checkout
 from app_orders.models import Item, Order, OrderItems
 from app_orders.serializers import SessionResponseSerializer, ItemSerializer, OrderSerializer
 from app_orders.stripe import StripeAPI
+import stripe
+
+
+class SuccessView(TemplateView):
+    template_name = "success.html"
+
+
+class CancelView(TemplateView):
+    template_name = "cancel.html"
 
 
 class ItemCheckoutView(RetrieveAPIView):
@@ -63,7 +74,8 @@ class OrderCheckoutView(RetrieveAPIView):
         line_items = build_checkout(items)
         session = StripeAPI.create_checkout_session(
             items[0].currency,
-            line_items
+            line_items,
+            order.id,
         )
         return Response({"session_id": session.id})
 
@@ -90,3 +102,24 @@ class OrderView(RetrieveAPIView):
              'order': order,
              'stripe_publish_key': stripe_publish_key}
         )
+
+
+class StripeWebhook(APIView):
+    """Вебхук для платежной системы stripe"""
+
+    def post(self, request):
+        try:
+            event = StripeAPI.construct_event(
+                request.body,
+                request.META['HTTP_STRIPE_SIGNATURE']
+            )
+        except ValueError:
+            # Invalid payload
+            return Response(status=400)
+        except stripe.error.SignatureVerificationError:
+            # Invalid signature
+            return Response(status=400)
+
+        StripeAPI.handle_event(event)
+
+        return Response(status=200)
