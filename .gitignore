@@ -103,6 +103,7 @@ celerybeat.pid
 
 # Environments
 .env
+.env.*
 .venv
 env/
 venv/
@@ -128,4 +129,3 @@ dmypy.json
 # Pyre type checker
 .pyre/
 /payment-forms/pgdata/
-.idea/

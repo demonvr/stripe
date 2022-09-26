@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('APP_SECRET_KEY', 'app')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('APP_DEBUG', True)
+DEBUG = bool(os.environ.get("APP_DEBUG") in ["True", "true", "1"])
 
 ALLOWED_HOSTS: List[str] = os.environ.get("ALLOWED_HOSTS", "localhost").split(",")
 

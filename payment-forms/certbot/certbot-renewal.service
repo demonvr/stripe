@@ -1,0 +1,7 @@
+[Unit]
+Description=Certbot Renewal
+
+[Service]
+WorkingDirectory=/usr/src
+ExecStart=/usr/bin/docker-compose up certbot
+ExecStartPost=/usr/bin/docker-compose restart proxy
