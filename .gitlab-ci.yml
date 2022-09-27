@@ -35,3 +35,4 @@ deploy:
     url: http://31.31.203.49
   only:
     - develop
+
