@@ -42,7 +42,7 @@ services:
         - /etc/letsencrypt:/etc/letsencrypt
         - /certbot/www:/var/www/certbot
         - /certbot/log/letsencrypt:/var/log/letsencrypt
-    restart: always
+    restart: unless-stopped
     ports:
         - "80:80"
         - "443:443"
