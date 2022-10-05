@@ -24,11 +24,10 @@ build:
     POSTGRES_USER: $DB_USER
     POSTGRES_PASSWORD: $DB_PASSWORD
   script:
-    - echo $CI_REGISTRY_IMAGE
-    - echo $CI_REGISTRY_USER
-    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - cp .env.sample ./deploy/.env
+#    - docker pull $CI_REGISTRY_IMAGE:latest || true
     - docker-compose -f ./deploy/docker-compose.yml up -d
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-    - docker push $CI_REGISTRY_IMAGE:latest
+#    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+#    - docker push $CI_REGISTRY_IMAGE:latest
   tags:
     - deployment
