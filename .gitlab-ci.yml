@@ -1,13 +1,24 @@
 #image: docker:latest
+#
+#
+#variables:
+#  DOCKER_TLS_CERTDIR: "/certs"
+#  DOCKER_BUILDKIT: 1
+#  COMPOSE_DOCKER_CLI_BUILD: 1
+#
+#services:
+#    - docker:dind
+
+
 image: docker/compose:latest
+services:
+  - docker:dind
 
 variables:
-  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_DRIVER: overlay2
   DOCKER_BUILDKIT: 1
   COMPOSE_DOCKER_CLI_BUILD: 1
 
-services:
-    - docker:dind
 
 stages:
     - build
