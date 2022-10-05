@@ -9,15 +9,15 @@
 #services:
 #    - docker:dind
 
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
 
 image: docker/compose:latest
 services:
   - docker:dind
 
-variables:
-  DOCKER_DRIVER: overlay2
-  DOCKER_BUILDKIT: 1
-  COMPOSE_DOCKER_CLI_BUILD: 1
+
 
 
 stages:
@@ -31,8 +31,9 @@ before_script:
   - echo $CI_REGISTRY_USER
   - echo $CI_REGISTRY_PASSWORD
   - echo $CI_REGISTRY
+  - docker version
   - docker-compose --version
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - cp .env.sample .env
 
 build:
