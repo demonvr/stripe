@@ -9,10 +9,11 @@ services:
 
 stages:
     - build
+    - test
 
 before_script:
   - echo $CI_REGISTRY_IMAGE
-  - echo CI_BUILD_REF_NAME
+  - echo $CI_BUILD_REF_NAME
   - apk add --no-cache py-pip
   - pip install docker-compose
   - docker info
@@ -27,9 +28,14 @@ build:
     POSTGRES_PASSWORD: $DB_PASSWORD
   script:
     - cp .env.sample .env
-#    - docker pull $CI_REGISTRY_IMAGE:latest || true
-    - docker-compose up -d
-#    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-#    - docker push $CI_REGISTRY_IMAGE:latest
+    - docker-compose build
+    - docker-compose push
+
   tags:
     - deployment
+
+test:
+  stage: test
+  script:
+    - docker-compose pull test
+    - docker-compose run test

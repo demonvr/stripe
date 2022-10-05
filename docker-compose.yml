@@ -2,11 +2,12 @@ version: '3.5'
 
 services:
   web:
+    image: ${CI_REGISTRY_IMAGE}:${CI_BUILD_REF_NAME}
     container_name: payment_forms_web
     build:
       context: ./payment-forms
       dockerfile: Dockerfile.deploy
-    command: sh -c 'while !</dev/tcp/db/5432; do sleep 1; done; python manage.py test'
+    command: sh -c 'while !</dev/tcp/db/5432; do sleep 1; done; python manage.py runserver 0.0.0.0:8000'
     volumes:
       - ./src/:/usr/src/app/
     ports:
@@ -17,6 +18,11 @@ services:
       - DB_HOST=db
     depends_on:
       - db
+
+  test:
+    image: ${CI_REGISTRY_IMAGE}:${CI_BUILD_REF_NAME}
+    command: python manage.py test
+    restart: "no"
 
   db:
     container_name: payment_forms_db
