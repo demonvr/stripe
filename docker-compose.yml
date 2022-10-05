@@ -2,10 +2,12 @@ version: '3.5'
 
 services:
   web:
-    image: ${CI_REGISTRY_IMAGE}:${CI_BUILD_REF_NAME}
+    image: ${CI_REGISTRY_IMAGE}:latest
     container_name: payment_forms_web
     build:
       context: ./payment-forms
+      cache_from:
+        - ${CI_REGISTRY_IMAGE}:latest
       dockerfile: Dockerfile.deploy
     command: sh -c 'while !</dev/tcp/db/5432; do sleep 1; done; python manage.py runserver 0.0.0.0:8000'
     volumes:
@@ -20,7 +22,7 @@ services:
       - db
 
   test:
-    image: ${CI_REGISTRY_IMAGE}:${CI_BUILD_REF_NAME}
+    image: ${CI_REGISTRY_IMAGE}:latest
     command: python manage.py test
     restart: "no"
 
