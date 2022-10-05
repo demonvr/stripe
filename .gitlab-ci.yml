@@ -43,7 +43,7 @@ test:
 #    - docker-compose pull $CI_REGISTRY_IMAGE:latest
 #    - docker-compose run test
     - docker-compose pull
-    - docker-compose up -d
+#    - docker-compose up -d
     - docker-compose run test
 
   tags:
