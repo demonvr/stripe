@@ -11,6 +11,8 @@ stages:
     - build
 
 before_script:
+  - echo $CI_REGISTRY_IMAGE
+  - echo CI_BUILD_REF_NAME
   - apk add --no-cache py-pip
   - pip install docker-compose
   - docker info
