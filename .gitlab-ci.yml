@@ -47,3 +47,5 @@ deploy:
   script:
     - docker-compose pull
     - docker-compose up -d
+  tags:
+    - deployment
