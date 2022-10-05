@@ -5,8 +5,8 @@ services:
     container_name: payment_forms_web
     build:
       context: ./payment-forms
-      dockerfile: Dockerfile.prod
-    command: sh -c 'python manage.py test'
+      dockerfile: Dockerfile.deploy
+    command: sh -c 'while !</dev/tcp/db/5432; do sleep 1; done; python manage.py test'
     volumes:
       - ./src/:/usr/src/app/
     ports:

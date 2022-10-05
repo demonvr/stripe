@@ -11,20 +11,16 @@ RUN apt-get update && \
 RUN apt install -y netcat
 
 # install dependencies
-COPY ../payment-forms/requirements.txt .
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # copy project
-COPY ../payment-forms/src .
-
-COPY ../payment-forms/scripts /usr/src/app/scripts
-
-RUN chmod +x /usr/src/app/scripts/*
+COPY ./src .
 
 RUN mkdir -p /vol/web/media
 RUN mkdir -p /vol/web/static
 
 RUN chmod -R 755 /vol/web
 
-ENTRYPOINT ["/usr/src/app/scripts/entrypoint.sh"]
+
 
