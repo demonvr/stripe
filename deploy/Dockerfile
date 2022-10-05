@@ -15,7 +15,7 @@ COPY ../payment-forms/requirements.txt .
 RUN pip install -r requirements.txt
 
 # copy project
-COPY ../payment-forms//src .
+COPY ../payment-forms/src .
 
 COPY ../payment-forms/scripts /usr/src/app/scripts
 
