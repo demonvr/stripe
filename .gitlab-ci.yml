@@ -30,7 +30,6 @@ build:
   script:
 #    - docker-compose build --build-arg BUILDKIT_INLINE_CACHE=1
 #    - docker-compose push $CI_REGISTRY_IMAGE:latest
-    - docker-compose pull || true
     - docker-compose build --build-arg BUILDKIT_INLINE_CACHE=1
     - docker-compose push web
 
