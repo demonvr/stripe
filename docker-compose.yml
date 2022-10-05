@@ -26,6 +26,8 @@ services:
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; python manage.py test'
     env_file:
       - ./.env
+    environment:
+      - DB_HOST=db
     restart: "no"
     depends_on:
       - db
