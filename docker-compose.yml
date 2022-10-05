@@ -3,7 +3,9 @@ version: '3.5'
 services:
   web:
     container_name: payment_forms_web
-    build: .
+    build:
+      context: ./payment-forms
+      dockerfile: Dockerfile.prod
     command: sh -c 'python manage.py test'
     volumes:
       - ./src/:/usr/src/app/
