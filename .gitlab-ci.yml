@@ -1,25 +1,22 @@
-stages:
-    - build
+image: docker:stable
 
 variables:
-  # отключаем проверку Docker TLS
-  DOCKER_TLS_CERTDIR: ""
-  # адрес localhost используется как контейнером задачи, так и dind контейнером (поскольку они используют один и тот же под)
-  # Таким образом, при выполнении команд Docker эта конфигурация делает службу dind нашим демоном Docker
-  DOCKER_HOST: "tcp://localhost:2375"
+  DOCKER_TLS_CERTDIR: "/certs"
 
 services:
     - docker:dind
 
+stages:
+    - build
 
 before_script:
   - docker info
-  - docker-compose --version
+#  - docker-compose --version
 
-
-build:
-  stage: build
-  script:
-    - docker-compose build .
-  tags:
-    - deployment
+#
+#build:
+#  stage: build
+#  script:
+#    - docker-compose build .
+#  tags:
+#    - deployment
