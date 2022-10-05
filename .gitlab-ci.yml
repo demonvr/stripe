@@ -1,22 +1,25 @@
-image: docker:stable
+image: docker:latest
 
 variables:
   DOCKER_TLS_CERTDIR: "/certs"
 
 services:
-    - docker:stable-dind
+    - docker:dind
 
 stages:
     - build
 
 before_script:
+  - apk add --no-cache py-pip
+  - pip install docker-compose
   - docker info
-  - docker-compose --version
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN docker.registry.com
 
 
 build:
   stage: build
   script:
-    - docker build .
+    - cp ./payment-forms/.env.prod ./deploy/.env
+    - docker-compose -f ./deploy/docker-compose.yml up -d
   tags:
     - deployment
