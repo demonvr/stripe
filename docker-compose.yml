@@ -24,6 +24,8 @@ services:
   test:
     image: ${CI_REGISTRY_IMAGE}:latest
     command: python manage.py test
+    env_file:
+      - ./.env
     restart: "no"
 
   db:
