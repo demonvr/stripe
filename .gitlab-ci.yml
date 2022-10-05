@@ -24,7 +24,7 @@ build:
     POSTGRES_USER: $DB_USER
     POSTGRES_PASSWORD: $DB_PASSWORD
   script:
-    - cp .env.sample ./deploy/.env
+    - cp .env.sample .env
 #    - docker pull $CI_REGISTRY_IMAGE:latest || true
     - docker-compose up -d
 #    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
