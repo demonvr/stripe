@@ -1,9 +1,10 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django import test
 
 from app_orders.models import Order, Item, OrderItems
 from django.core.exceptions import ValidationError
-
+from django.urls import reverse
+from rest_framework import status
 
 class OrdersTests(TestCase):
     def setUp(self) -> None:
@@ -49,3 +50,10 @@ class OrdersTests(TestCase):
                                       quantity=1,
                                       item=item3,
                                       order=self.order1)
+
+    def test_success_cancel_url(self):
+        client = Client()
+        response = client.get(reverse("api:app_orders:success"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = client.get(reverse("api:app_orders:cancel"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
