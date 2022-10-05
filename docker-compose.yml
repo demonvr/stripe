@@ -21,10 +21,10 @@ services:
     depends_on:
       - db
 
-#  test:
-#    image: ${CI_REGISTRY_IMAGE}:latest
-#    command: python manage.py test
-#    restart: "no"
+  test:
+    image: ${CI_REGISTRY_IMAGE}:latest
+    command: python manage.py test
+    restart: "no"
 
   db:
     container_name: payment_forms_db
