@@ -13,10 +13,10 @@ before_script:
   - docker info
 #  - docker-compose --version
 
-#
-#build:
-#  stage: build
-#  script:
-#    - docker-compose build .
-#  tags:
-#    - deployment
+
+build:
+  stage: build
+  script:
+    - docker build .
+  tags:
+    - deployment
