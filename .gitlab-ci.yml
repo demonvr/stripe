@@ -28,8 +28,6 @@ build:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
 #    - echo "$CI_REGISTRY_PASSWORD" | docker login --username $CI_REGISTRY_USER --password-stdin
     - cp .env.sample .env
-    - echo $TAG_COMMIT
-    - echo $TAG_LATEST
   script:
     - docker-compose build --build-arg BUILDKIT_INLINE_CACHE=1
     - docker-compose push $TAG_COMMIT
