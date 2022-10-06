@@ -17,7 +17,7 @@ build:
   image: docker/compose:latest
   stage: build
   services:
-    - docker:20.10.12-dind
+    - docker:dind
   tags:
     - deployment
   variables:
@@ -29,22 +29,28 @@ build:
     - docker-compose version
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
 #    - echo "$CI_REGISTRY_PASSWORD" | docker login --username $CI_REGISTRY_USER --password-stdin
-  script:
     - cp .env.sample .env
+  script:
+
     - docker-compose build --build-arg BUILDKIT_INLINE_CACHE=1
     - docker-compose push web
 
 test:
+  image: docker/compose:latest
   stage: test
+  services:
+    - docker:dind
+  tags:
+    - deployment
+#  before_script:
+#    - cp .env.sample .env
   script:
     - docker-compose pull
     - docker-compose run test
 
-  tags:
-    - deployment
-
 
 deploy:
+  image: docker/compose:latest
   stage: deploy
   script:
     - docker-compose pull
