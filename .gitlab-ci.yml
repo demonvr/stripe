@@ -42,8 +42,8 @@ test:
     - docker:dind
   tags:
     - deployment
-#  before_script:
-#    - cp .env.sample .env
+  before_script:
+    - cp .env.sample .env
   script:
     - docker-compose pull
     - docker-compose run test
