@@ -7,7 +7,7 @@ variables:
   COMPOSE_DOCKER_CLI_BUILD: 1
 
 services:
-    - docker:dind
+    - docker:20.10.12-dind
 
 stages:
     - build
