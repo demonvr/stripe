@@ -30,8 +30,7 @@ build:
     - cp .env.sample .env
   script:
     - docker-compose build --build-arg BUILDKIT_INLINE_CACHE=1
-    - docker-compose push $TAG_COMMIT
-    - docker-compose push $TAG_LATEST
+    - docker-compose push web
 
 test:
   image: docker/compose:latest
