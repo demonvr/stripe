@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   web:
-    image: ${CI_REGISTRY_IMAGE}:latest
+    image: ${CI_REGISTRY_IMAGE}:stage
     container_name: payment_forms_web
     build:
       context: ./payment-forms
@@ -22,7 +22,7 @@ services:
       - db
 
   test:
-    image: ${CI_REGISTRY_IMAGE}:latest
+    image: ${CI_REGISTRY_IMAGE}:stage
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; python manage.py test'
     env_file:
       - ./.env
