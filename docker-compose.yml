@@ -2,12 +2,13 @@ version: '3.5'
 
 services:
   web:
-    image: ${CI_REGISTRY_IMAGE}:stage
+#    image: ${CI_REGISTRY_IMAGE}:stage
+    image: ${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_NAME}:${CI_COMMIT_SHORT_SHA}
     container_name: payment_forms_web
     build:
       context: ./payment-forms
       cache_from:
-        - ${CI_REGISTRY_IMAGE}:latest
+        - ${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_NAME}:${CI_COMMIT_SHORT_SHA}
       dockerfile: Dockerfile.deploy
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; python manage.py runserver 0.0.0.0:8000'
     volumes:
@@ -22,7 +23,8 @@ services:
       - db
 
   test:
-    image: ${CI_REGISTRY_IMAGE}:stage
+#    image: ${CI_REGISTRY_IMAGE}:stage
+    image: ${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_NAME}:${CI_COMMIT_SHORT_SHA}
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; python manage.py test'
     env_file:
       - ./.env
