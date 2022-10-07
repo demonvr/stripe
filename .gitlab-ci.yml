@@ -62,13 +62,11 @@ deploy:
     - apk update && apk add openssh-client
     - eval $(ssh-agent -s)
     - cat "$ID_RSA" | ssh-add -
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - cat <<< "${HOST_KEY}" > ~/.ssh/known_hosts
+    - chmod og= $ID_RSA
   script:
-    - docker-compose --skip-hostname-check -H "ssh://$SERVER_USER@$SERVER_IP"  pull web
+    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull web
     - docker container rm -f web || true
-    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" --skip-hostname-check  run web
+    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" run web
 
 
 #docker container rm -f my-app || true
