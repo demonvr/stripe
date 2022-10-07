@@ -48,6 +48,8 @@ stages:
 deploy:
   image: docker/compose:latest
   stage: deploy
+  services:
+    - docker:dind
   tags:
     - deployment
   before_script:
