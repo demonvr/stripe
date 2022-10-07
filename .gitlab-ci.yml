@@ -48,13 +48,10 @@ stages:
 deploy:
   image: docker/compose:latest
   stage: deploy
-  services:
-    - docker:dind
   tags:
     - deployment
-  before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull $CI_REGISTRY_IMAGE
 
 
