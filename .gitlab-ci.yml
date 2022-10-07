@@ -62,7 +62,9 @@ deploy:
     - apk update && apk add openssh-client
     - eval $(ssh-agent -s)
     - cat "$ID_RSA" | ssh-add -
-    - echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+#    - echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+    - mkdir -m 700 -p ~/.ssh
+    - ssh-keyscan -t rsa $SERVER_IP >> ~/.ssh/known_hosts
   script:
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull web
     - docker container rm -f web || true
