@@ -44,7 +44,6 @@ test:
   script:
     - docker-compose pull $TAG_STAGE
     - docker-compose run test
-  when: manual
 #stages:
 #  - deploy
 
@@ -75,7 +74,7 @@ deploy:
 #    - apk update && apk add openssh-client
 #    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
 #    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $TAG_STAGE"
-#    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker rm -f web"
+#    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f web"
 #    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker-compose up -d"
 #  environment:
 #    name: production
