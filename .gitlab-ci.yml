@@ -64,7 +64,7 @@ deploy:
     - eval $(ssh-agent -s)
     - cat "$ID_RSA" | tr -d '\r' | ssh-add - > /dev/null
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull web
-    - echo "docker ps"
+    - echo docker ps
     - docker container rm -f web || true
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" run web
 
