@@ -8,46 +8,46 @@ variables:
   TAG_STAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:stage
   TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA
 
-#stages:
-#    - build
-#    - test
-#    - deploy
-#
-#build:
-#  image: docker/compose:latest
-#  stage: build
-#  services:
-#    - docker:dind
-#  tags:
-#    - deployment
-#  variables:
-#    POSTGRES_DB: $DB_NAME
-#    POSTGRES_USER: $DB_USER
-#    POSTGRES_PASSWORD: $DB_PASSWORD
-#  before_script:
-#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-##    - echo "$CI_REGISTRY_PASSWORD" | docker login --username $CI_REGISTRY_USER --password-stdin
-#    - cp .env.sample .env
-#  script:
-#    - docker-compose build --build-arg BUILDKIT_INLINE_CACHE=1
-#    - docker-compose push web
-#
-#test:
-#  image: docker/compose:latest
-#  stage: test
-#  services:
-#    - docker:dind
-#  tags:
-#    - deployment
-#  before_script:
-#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-#    - cp .env.sample .env
-#  script:
-#    - docker-compose pull test
-#    - docker-compose run test
-
 stages:
-  - deploy
+    - build
+    - test
+    - deploy
+
+build:
+  image: docker/compose:latest
+  stage: build
+  services:
+    - docker:dind
+  tags:
+    - deployment
+  variables:
+    POSTGRES_DB: $DB_NAME
+    POSTGRES_USER: $DB_USER
+    POSTGRES_PASSWORD: $DB_PASSWORD
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#    - echo "$CI_REGISTRY_PASSWORD" | docker login --username $CI_REGISTRY_USER --password-stdin
+    - cp .env.sample .env
+  script:
+    - docker-compose build --build-arg BUILDKIT_INLINE_CACHE=1
+    - docker-compose push web
+
+test:
+  image: docker/compose:latest
+  stage: test
+  services:
+    - docker:dind
+  tags:
+    - deployment
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - cp .env.sample .env
+  script:
+    - docker-compose pull test
+    - docker-compose run test
+
+#stages:
+#  - deploy
 
 deploy:
   image: docker/compose:latest
@@ -66,7 +66,7 @@ deploy:
     - mkdir -m 700 -p ~/.ssh
     - ssh-keyscan -t rsa $SERVER_IP >> ~/.ssh/known_hosts
   script:
-#    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull web
+    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull web
     - docker container rm -f web || true
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" run web
 
