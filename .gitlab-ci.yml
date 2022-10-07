@@ -5,7 +5,7 @@ variables:
   DOCKER_TLS_CERTDIR: ""
   DOCKER_DRIVER: overlay2
 
-  TAG_STAGE: $CI_REGISTRY_IMAGE:stage
+  TAG_STAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:stage
   TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA
 
 stages:
@@ -47,6 +47,7 @@ test:
   script:
     - docker-compose pull test
     - docker-compose run test
+
 #stages:
 #  - deploy
 
@@ -61,6 +62,8 @@ deploy:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - cp .env.sample .env
   script:
+    - eval $(ssh-agent -s)
+    - echo "$ID_RSA" | tr -d '\r' | ssh-add - > /dev/null
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull web
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" up -d
 
