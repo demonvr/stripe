@@ -61,7 +61,7 @@ deploy:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - cp .env.sample .env
   script:
-    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull $CI_REGISTRY_IMAGE:stage
+    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull web
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" up -d
 
 
