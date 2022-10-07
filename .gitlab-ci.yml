@@ -65,7 +65,7 @@ deploy:
     - cat "$ID_RSA" | tr -d '\r' | ssh-add - > /dev/null
     - docker-compose --skip-hostname-check -H "ssh://$SERVER_USER@$SERVER_IP"  pull web
     - docker container rm -f web || true
-    - docker-compose --skip-hostname-check -H "ssh://$SERVER_USER@$SERVER_IP" run web
+    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" --skip-hostname-check  run web
 
 
 #docker container rm -f my-app || true
