@@ -59,10 +59,12 @@ deploy:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - cp .env.sample .env
-  script:
-    - apk update && apk add openssh-client
     - eval $(ssh-agent -s)
-    - cat "$ID_RSA" | tr -d '\r' | ssh-add - > /dev/null
+    - cat "$ID_RSA" | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - cat <<< "${HOST_KEY}" > ~/.ssh/known_hosts
+  script:
     - docker-compose --skip-hostname-check -H "ssh://$SERVER_USER@$SERVER_IP"  pull web
     - docker container rm -f web || true
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" --skip-hostname-check  run web
