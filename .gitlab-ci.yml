@@ -4,7 +4,7 @@ variables:
   DOCKER_TLS_CERTDIR: ""
   DOCKER_DRIVER: overlay2
 
-  TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:latest
+  TAG_STAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:stage
   TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA
 
 stages:
@@ -42,9 +42,9 @@ test:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - cp .env.sample .env
   script:
-    - docker-compose pull $TAG_COMMIT
+    - docker-compose pull $TAG_STAGE
     - docker-compose run test
-
+  when: manual
 #stages:
 #  - deploy
 
@@ -59,7 +59,7 @@ deploy:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - cp .env.sample .env
   script:
-    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull $TAG_COMMIT
+    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull $TAG_STAGE
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" up -d
 
 
@@ -74,8 +74,8 @@ deploy:
 #    - chmod og= $ID_RSA
 #    - apk update && apk add openssh-client
 #    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
-#    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $CI_REGISTRY_IMAGE"
-#    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP ""
+#    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $TAG_STAGE"
+#    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker rm -f web"
 #    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker-compose up -d"
 #  environment:
 #    name: production
