@@ -66,7 +66,7 @@ deploy:
     - mkdir -m 700 -p ~/.ssh
     - ssh-keyscan -t rsa $SERVER_IP >> ~/.ssh/known_hosts
   script:
-    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull web
+#    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull web
     - docker container rm -f web || true
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" run web
 
