@@ -25,8 +25,6 @@ build:
     POSTGRES_USER: $DB_USER
     POSTGRES_PASSWORD: $DB_PASSWORD
   before_script:
-    - echo $CI_REGISTRY_IMAGE
-    - echo $CI_REGISTRY_IMAGE:stage
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
 #    - echo "$CI_REGISTRY_PASSWORD" | docker login --username $CI_REGISTRY_USER --password-stdin
     - cp .env.sample .env
@@ -62,6 +60,7 @@ deploy:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - cp .env.sample .env
   script:
+    - apk update && apk add openssh-client
     - eval $(ssh-agent -s)
     - echo "$ID_RSA" | tr -d '\r' | ssh-add - > /dev/null
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull web
