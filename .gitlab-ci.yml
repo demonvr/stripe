@@ -45,7 +45,7 @@ test:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - cp .env.sample .env
   script:
-    - docker-compose pull $CI_REGISTRY_IMAGE:stage
+    - docker-compose pull test
     - docker-compose run test
 #stages:
 #  - deploy
