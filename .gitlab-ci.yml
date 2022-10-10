@@ -53,7 +53,7 @@ deploy:
   image: docker/compose:latest
   stage: deploy
   services:
-    - docker:dind
+    - docker:latest
   tags:
     - deployment
   before_script:
@@ -68,7 +68,8 @@ deploy:
   script:
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull web
     - docker container rm -f web || true
-    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" run web | true
+#    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" run web | true
+    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" up -d web
 
 
 #docker container rm -f my-app || true
