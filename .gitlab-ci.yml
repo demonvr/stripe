@@ -53,7 +53,7 @@ deploy:
   image: docker/compose:latest
   stage: deploy
   services:
-    - docker:latest
+    - docker:dind
   tags:
     - deployment
   before_script:
