@@ -68,7 +68,7 @@ deploy:
   script:
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull web
     - docker -H "ssh://$SERVER_USER@$SERVER_IP" rm -f payment_forms_web || true
-    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" up -d web
+    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" up web -d
 
 
 #docker container rm -f my-app || true
