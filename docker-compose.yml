@@ -12,6 +12,7 @@ services:
     command: python manage.py runserver #gunicorn payment_forms.wsgi:application --bind 0.0.0.0:8000
     ports:
       - "8000:8000"
+    network_mode: "host"
     env_file:
       - ./.env
 
