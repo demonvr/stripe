@@ -67,7 +67,7 @@ deploy:
     - ssh-keyscan -t rsa $SERVER_IP >> ~/.ssh/known_hosts
   script:
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull web
-    - docker container rm -f web || true
+    - docker container rm -f payment_forms_web || true
 #    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" up -d web
 
 
