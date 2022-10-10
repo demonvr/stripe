@@ -9,7 +9,7 @@ services:
       cache_from:
         - ${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_NAME}:stage
       dockerfile: Dockerfile.deploy
-    command: bash -c 'while !</dev/tcp/localhost/5432; do sleep 1; done; gunicorn payment_forms.wsgi:application --bind 0.0.0.0:8000'
+    command: bash -c 'while !</dev/tcp/payment_forms_db/5432; do sleep 1; done; gunicorn payment_forms.wsgi:application --bind 0.0.0.0:8000'
     ports:
       - "8000:8000"
     env_file:
