@@ -18,8 +18,6 @@ services:
       - ./.env
     environment:
       - DB_HOST=db
-    depends_on:
-      - db
 
   test:
     image: ${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_NAME}:stage
