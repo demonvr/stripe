@@ -82,9 +82,6 @@ deploy:
   script:
     - chmod og= $ID_RSA
     - apk update && apk add openssh-client
-    - echo $CI_REGISTRY_IMAGE
-    - echo $CI_COMMIT_REF_NAME
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /usr/src/ && echo "CI_REGISTRY_IMAGE=$CI_REGISTRY_IMAGE" >> .env.prod"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $TAG_STAGE"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker rm -f payment_forms_web || true"
