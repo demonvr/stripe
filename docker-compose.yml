@@ -9,8 +9,7 @@ services:
       cache_from:
         - ${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_NAME}:stage
       dockerfile: Dockerfile.deploy
-    command: gunicorn payment_forms.wsgi:application --bind 0.0.0.0:8000 --error-logfile /var/log/gunicorn/error.log --access-logfile /var/log/gunicorn/access.log --capture-output --log-level debug
-    ports:
+    command: gunicorn payment_forms.wsgi:application --bind 0.0.0.0:8000
       - "8000:8000"
     network_mode: "host"
     env_file:
