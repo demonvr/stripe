@@ -71,7 +71,6 @@ stages:
 ##    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" up -d --no-recreate web
 #    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" up -d web
 
-
 deploy:
   image: alpine:latest
   stage: deploy
@@ -86,6 +85,3 @@ deploy:
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $TAG_STAGE"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker rm -f payment_forms_web || true"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /usr/src/ && docker-compose --env-file .env.prod up -d web"
-
-#  only:
-#    - master
