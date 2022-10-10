@@ -49,43 +49,41 @@ variables:
 stages:
   - deploy
 
-deploy:
-  image: docker/compose:latest
-  stage: deploy
-  services:
-    - docker:dind
-  tags:
-    - deployment
-  before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - cp .env.sample .env
-    - apk update && apk add openssh-client
-    - eval $(ssh-agent -s)
-    - cat "$ID_RSA" | ssh-add -
-#    - echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
-    - mkdir -m 700 -p ~/.ssh
-    - ssh-keyscan -t rsa $SERVER_IP >> ~/.ssh/known_hosts
-  script:
-    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull web
-    - docker -H "ssh://$SERVER_USER@$SERVER_IP" rm -f payment_forms_web || true
-#    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" up -d --no-recreate web
-    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" up -d web
-
-
-#docker container rm -f my-app || true
-
 #deploy:
-#  image: alpine:latest
+#  image: docker/compose:latest
 #  stage: deploy
+#  services:
+#    - docker:dind
 #  tags:
 #    - deployment
-#  script:
-#    - chmod og= $ID_RSA
+#  before_script:
+#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#    - cp .env.sample .env
 #    - apk update && apk add openssh-client
-#    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
-#    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull web"
-#    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f web"
-#    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker-compose up -d"
+#    - eval $(ssh-agent -s)
+#    - cat "$ID_RSA" | ssh-add -
+##    - echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+#    - mkdir -m 700 -p ~/.ssh
+#    - ssh-keyscan -t rsa $SERVER_IP >> ~/.ssh/known_hosts
+#  script:
+#    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull web
+#    - docker -H "ssh://$SERVER_USER@$SERVER_IP" rm -f payment_forms_web || true
+##    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" up -d --no-recreate web
+#    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" up -d web
+
+
+deploy:
+  image: alpine:latest
+  stage: deploy
+  tags:
+    - deployment
+  script:
+    - chmod og= $ID_RSA
+    - apk update && apk add openssh-client
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull web"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker rm -f web || true"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker-compose up -d web"
 #  environment:
 #    name: production
 #    url: http://your_server_IP
